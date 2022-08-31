@@ -1,27 +1,25 @@
-import { generateWAMessageFromContent } from '@adiwajshing/baileys'
+//Make & Help By
+//Johannes & Papah-Chan
 import jimp from 'jimp'
+import fs from 'fs'
+import fetch from 'node-fetch'
 import PhoneNumber from 'awesome-phonenumber'
+import moment from 'moment-timezone'
 
-let handler = async (m, { conn, usedPrefix: _p }) => {
-
-  let user = `@${m.sender.split('@')[0]}`
-    
-  
 let tags = {}
 const defaultMenu = {
-  before: `Hi, ${user} 👋\n\n≻ Date: %date\n≻ Time: %time WIB\n≻ Runtime: %uptime\n%readmore`,
-  header: '╭┉┉┉≻ *“%category”* ≺┉┉┉',
-  body: `┆ \t ➦ _%cmd%islimit%isPremium_ `,
-  footer: '┆',
-  after: `╰┉┉┉≻\t _© ${conn.user.name}_ \t`,
+  before: `\n> Date: %date\n> Time: %time \n> Runtime: %uptime\n%readmore`,
+  header: '*❏═┅═━–〈 %category*',
+  body: '┊› %cmd %islimit %isPremium',
+  footer: '',
+  after: '',
 }
 
-
-
+let handler = async (m, { conn, usedPrefix: _p }) => {
   try {
     let name = m.pushName || conn.getName(m.sender)
     let d = new Date(new Date + 3600000)
-    let locale = 'id'
+    let locale = 'en'
     // d.getTimeZoneOffset()
     // Offset -420 is 18.00
     // Offset    0 is  0.00
@@ -42,7 +40,12 @@ const defaultMenu = {
         setTimeout(resolve, 1000)
       }) * 1000
     }
-    
+    let res = await fetch('https://raw.githubusercontent.com/ArugaZ/grabbed-results/main/random/anime/neko.txt')
+    let txt = await res.text()
+    let arr = txt.split('\n')
+    let cita = arr[Math.floor(Math.random() * arr.length)]
+    let thumb = await(await fetch(cita)).buffer()
+      let vn = './media/tante-tante.mp3'
     let uptime = clockString(_uptime)
     let help = Object.values(global.plugins).filter(plugin => !plugin.disabled).map(plugin => {
       return {
@@ -71,8 +74,8 @@ const defaultMenu = {
           ...help.filter(menu => menu.tags && menu.tags.includes(tag) && menu.help).map(menu => {
             return menu.help.map(help => {
               return body.replace(/%cmd/g, menu.prefix ? help : '%p' + help)
-                .replace(/%islimit/g, menu.limit ? '(Limit)' : '')
-                .replace(/%isPremium/g, menu.premium ? '(Premium)' : '')
+                .replace(/%islimit/g, menu.limit ? 'Ⓛ' : '')
+                .replace(/%isPremium/g, menu.premium ? 'Ⓟ' : '')
                 .trim()
             }).join('\n')
           }),
@@ -89,66 +92,38 @@ const defaultMenu = {
       name, date, time,
       readmore: readMore
     }
+    let fkon = { key: { fromMe: false, participant: `${m.sender.split`@`[0]}@s.whatsapp.net`, ...(m.chat ? { remoteJid: '16504228206@s.whatsapp.net' } : {}) }, message: { contactMessage: { displayName: `${name}`, vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:${name}\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`}}}
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-
-const vi = ['https://telegra.ph/file/26dea419be3a235b7e1ef.mp4',
-'https://telegra.ph/file/08041d63d918edf10a20a.mp4',
-'https://telegra.ph/file/26dea419be3a235b7e1ef.mp4', 'https://telegra.ph/file/08041d63d918edf10a20a.mp4',     'https://telegra.ph/file/26dea419be3a235b7e1ef.mp4', 'https://telegra.ph/file/26dea419be3a235b7e1ef.mp4',     'https://telegra.ph/file/26dea419be3a235b7e1ef.mp4']
-
-var vid = vi[Math.floor(Math.random() * (vi.length))]
-
-                         let hi = `\n\n\t\t _Have a good day ${name}_ \t\t\n\n`
-
-    const totag = { contextInfo: { mentionedJid: [text] }}
-
-    let mtag = text + totag
     // const pp = await conn.profilePictureUrl(conn.user.jid, 'image').catch(_ => './src/avatar_contact.png')
     // if (m.isGroup) return conn.sendButton(m.chat, text.trim(), conn.getName(conn.user.jid), pp, [['Speedtest', _p + 'ping'], ['Owner', _p + 'owner']], m)
-    // conn.sendHydrated(m.chat, text.trim(), conn.getName(conn.user.jid), pp, null, null, null, null, [['Speedtest', _p + 'ping'], ['Owner', _p + 'owner']])
+    //conn.sendHydrated(m.chat, text.trim(), conn.getName(conn.user.jid), await genProfile(conn, m), 'https://youtube.com/channel/UC0hs_I8N3JntK5vO6KogavQ', 'YouTube', null, null, [['Speedtest', _p + 'ping'], ['Owner', _p + 'owner']], m)
    // conn.sendMessage(m.chat, { video: { url: 'https://telegra.ph/file/c82d5c358495e8ef15916.mp4' }, gifPlayback: true, gifAttribution: ~~(Math.random() * 2), caption: text.trim(), footer: await conn.getName(conn.user.jid) , templateButtons: [{ quickReplyButton: { displayText: 'Speedtest', id: `${_p}ping` }}, { quickReplyButton: { displayText: 'Owner', id: `${_p}owner` }} ] })
-     /*
-conn.sendButton(m.chat, text.trim(), conn.user.name, await genProfile(conn, m), [['Speedtest', _p + 'ping'], ['Owner', _p + 'owner']], m)
-*/
+   conn.sendButton(m.chat, `*${wish()}, ${name} 👋*`, text.trim(), await genProfile(conn, m), [['Speedtest', _p + 'ping'], ['Owner', _p + 'owner']], false, { quoted: fkon, contextInfo: { externalAdReply: { showAdAttribution: true,
+    mediaUrl: "https://Instagram.com/bot_whangsaf",
+    mediaType: "VIDEO",
+    description: "https://Instagram.com/bot_whangsaf", 
+    title: 'Simple Bot Esm',
+    body: wm,
+    thumbnail: thumb,
+    sourceUrl: sgc
+}
+} })
+conn.sendFile(m.chat, vn, 'dj1.mp3', null, m, true, {
+type: 'audioMessage', 
+ptt: true 
+})
+    // conn.sendButton(m.chat, 
+    //`*Hi, ${name} 👋*\n\n`, 
+  //  text.trim(), './media/marin.jpg', [
 
-let ppl = await( await conn.profilePictureUrl(m.sender, 'image').catch(() => 'https://telegra.ph/file/24fa902ead26340f3df2c.png'))
-
-    let ppb = await( await conn.profilePictureUrl(conn.user.jid, 'image').catch(() => 'https://telegra.ph/file/24fa902ead26340f3df2c.png'))
-    
-//Jejak
- /*
-conn.sendButton(m.chat, hi, text.trim(), await( await conn.getFile(ppb)).data, [['OWNER', '-owner']], false, { quoted: m, contextInfo: { externalAdReply: { showAdAttribution: true,
-mediaType:  2,
-mediaUrl: 'https://youtu.be/Nq3x1AkwgpY',
-title: time,
-body: me,
-sourceUrl: 'http://s.id/0x404', thumbnail: await( await conn.getFile(ppl)).data
-*/
-
-    await m.reply('_Ｌｏａｄｉｎｇ．．．_')
+   await m.reply('_Loading..._')
  await conn.relayMessage(m.chat, { reactionMessage: { key: m.key, text: '✅'  }}, { messageId: m.key.id })
-// Gif button
- /* conn.sendMessage(m.chat, { video: { url: vid }, gifPlayback: true, gifAttribution: ~~(Math.random() * 2), caption: text.trim(), footer: conn.getName('6283820073017@s.whatsapp.net') ,templateButtons: [ { quickReplyButton: { displayText: 'Owner', id: `${_p}owner` }}, { urlButton: { displayText: '𝙎𝘾', url: 'http://github.com/Rlxfly/re-md'} }]})
-*/
-
-
- const pre = generateWAMessageFromContent(m.chat, { liveLocationMessage:{
-  degreesLatitude: 35.685506276233525,
-  degreesLongitude: 139.75270667105852,
-  accuracyInMeters: 100,
-  speedInMps: 999,
-  degreesClockwiseFromMagneticNorth: 99,
-  caption: text.trim(),
-  sequenceNumber: 774236889,
-  timeOffset: 8600,
-  jpegThumbnail: thumb,
-  contextInfo: { mentionedJid: [m.sender] }
-}}, { quoted: m
-					})
-
-return conn.relayMessage(m.chat, pre.message, { messageId: pre.key.id })
+// [`Speedtest`, `${_p}ping`],
+// [`Owner`, `${_p}owner`]
+//], m, {asLocation: true})
   } catch (e) {
     m.reply('An error occurred')
-    m.reply(e)
+    throw e
   }
 }
 handler.help = ['menu']
@@ -167,4 +142,47 @@ function clockString(ms) {
   let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
   let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
+}
+
+function wish() {
+    let wishloc = ''
+  const time = moment.tz('Asia/Kolkata').format('HH')
+  wishloc = ('Hi')
+  if (time >= 0) {
+    wishloc = ('Night Rider')
+  }
+  if (time >= 4) {
+    wishloc = ('Good Morning')
+  }
+  if (time >= 12) {
+    wishloc = ('Good Afternoon')
+  }
+  if (time >= 16) {
+    wishloc = ('️Good Evening')
+  }
+  if (time >= 23) {
+    wishloc = ('Night Rider')
+  }
+  return wishloc
+}
+
+async function genProfile(conn, m) {
+  let font = await jimp.loadFont('./names.fnt'),
+    mask = await jimp.read('https://i.imgur.com/552kzaW.png'),
+    welcome = await jimp.read(thumbnailUrl.getRandom()),
+    avatar = await jimp.read(await conn.profilePictureUrl(m.sender, 'image').catch(() => 'https://telegra.ph/file/24fa902ead26340f3df2c.png')),
+    status = (await conn.fetchStatus(m.sender).catch(console.log) || {}).status?.slice(0, 30) || 'Not Detected'
+
+    await avatar.resize(460, 460)
+    await mask.resize(460, 460)
+    await avatar.mask(mask)
+    await welcome.resize(welcome.getWidth(), welcome.getHeight())
+
+    await welcome.print(font, 550, 180, 'Name:')
+    await welcome.print(font, 650, 255, m.pushName.slice(0, 25))
+    await welcome.print(font, 550, 340, 'About:')
+    await welcome.print(font, 650, 415, status)
+    await welcome.print(font, 550, 500, 'Number:')
+    await welcome.print(font, 650, 575, PhoneNumber('+' + m.sender.split('@')[0]).getNumber('international'))
+    return await welcome.composite(avatar, 50, 170).getBufferAsync('image/png')
 }
