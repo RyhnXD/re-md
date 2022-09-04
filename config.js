@@ -48,6 +48,7 @@ global.thumbnailUrl = [
   'https://telegra.ph/file/de92ed4a729887ffc974c.jpg', 'https://telegra.ph/file/00ce42a193b1dbbf907d4.jpg'
 ]
 
+global.sgc = 'https://chat.whatsapp.com/J5nGyTN0afU4o6uPHk2ab2'
 // Sticker WM
 global.packname = `\t\t「 Cʀᴇᴀᴛᴇᴅ Bʏ ʜ4ɴ 」\n\t\t「 ʏᴜᴋɪɴᴏ 」\n\t\t「 H4N 」\t\t\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n`
 global.author = ''
